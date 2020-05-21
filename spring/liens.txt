@@ -1,0 +1,49 @@
+Why I Hate Frameworks
+http://discuss.joelonsoftware.com/default.asp?joel.3.219431.12
+
+Ploum en J2EE
+https://ploum.net/ploum-en-j2ee/
+
+
+A propos de l'apprentissage en java : 
+http://eclipsesource.com/blogs/2012/09/18/must-reads-for-java-developers-from-beginner-to-professional-2/
+
+Sur le plaisir de programmer : 
+http://codebetter.com/patricksmacchia/2013/05/17/the-joy-of-being-a-programmer/
+
+Un développeur expérimenté (?)
+http://www.touilleur-express.fr/2017/02/18/un-developpeur-experimente/
+
+
+A propos des proxy (par association ou par héritage) :
+https://spring.io/blog/2012/05/23/transactions-caching-and-aop-understanding-proxy-usage-in-spring
+http://stackoverflow.com/questions/10664182/what-is-the-difference-between-jdk-dynamic-proxy-and-cglib
+
+A propos du type Optional
+https://stackoverflow.com/questions/26327957/should-java-8-getters-return-optional-type?noredirect=1&lq=1
+
+A propos de REST :
+http://blog.2partsmagic.com/restful-uri-design/
+
+A propos de NoSQL :
+https://www.youtube.com/watch?v=qI_g07C_Q5I
+
+A propos des types génériques :
+http://www.angelikalanger.com/GenericsFAQ/JavaGenericsFAQ.pdf
+
+A propos des expressions lambda :
+http://www.angelikalanger.com/Lambdas/Lambdas.pdf
+et
+http://www.angelikalanger.com/Lambdas/LambdaReference.pre-release.pdf 
+
+Spring Boot (Building "Bootiful" Microservices with Spring Boot) :
+https://youtu.be/VPtlZLdm7Nc 
+
+Panorama sur la Programmation réactive : 
+http://www.dng-consulting.com/?p=892
+
+Reactor by example
+https://www.infoq.com/articles/reactor-by-example
+
+Quoi de neuf avec Junit 5
+https://blog.zenika.com/2017/12/13/quoi-de-neuf-avec-junit-5/

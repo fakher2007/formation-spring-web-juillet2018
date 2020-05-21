@@ -1,0 +1,22 @@
+Accéder à http://localhost:5000/graphiql et exécuter la requête suivante : 
+
+{
+  bookById(id:1){
+    id
+    title
+    author: authorByAuthorId{
+      firstname
+      lastname
+    }
+    comments: bookCommentsByBookId{
+      totalCount
+      items: nodes{
+        text
+        author: memberByAuthorId{
+          username
+        }
+        date
+      }
+    }
+  }
+}

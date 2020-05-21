@@ -1,0 +1,38 @@
+version: '3'
+# création : docker-compose up
+# destruction : docker-compose down
+services:
+  pg:
+    image: postgres
+    ports:
+        - "5432:5432"
+    environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=
+        - POSTGRES_DB=ex3
+    volumes:
+        - ./ex3.sql:/docker-entrypoint-initdb.d/init.sql
+    command: postgres -c max_prepared_transactions=10
+  postgrest:
+    image: postgrest/postgrest
+    ports:
+      - "3000:3000"
+    environment:
+      PGRST_DB_URI: postgres://postgres@pg:5432/ex3
+      PGRST_DB_SCHEMA: public
+      PGRST_DB_ANON_ROLE: postgres
+      PGRST_SERVER_PROXY_URI: https://example.com:8443/postgres
+    depends_on:
+      - pg
+  postgraphile:
+    image: graphile/postgraphile
+    ports:
+      - "5000:5000"
+    environment:
+        DB_SCHEMA: "public"
+        PGUSER: postgres
+        PGHOST: pg
+        PGPORT: 5432
+        PGDATABASE: ex3
+    depends_on:
+      - pg      

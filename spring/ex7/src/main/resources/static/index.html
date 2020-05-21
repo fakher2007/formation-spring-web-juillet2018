@@ -1,0 +1,56 @@
+<html>
+
+<head>
+
+<!--
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.2/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+-->
+    <script src="sockjs-client-1.1.2.js"></script>
+    <script src="stomp-2.3.3.js"></script>
+
+    <script type="text/javascript">
+        var socket = new SockJS("//localhost:8080/hello"); // connexion websocket
+
+        var stompClient = Stomp.over(socket); // logique applicative pub/sub au dessus de la connexion websocket.
+
+        stompClient.debug = () => {}
+
+        stompClient.connect({}, function (frame) {
+            console.log(frame);
+
+            var subscription = stompClient.subscribe("/chats/123/outgoing-messages", (x) => {
+                console.log(x)
+                console.log(JSON.parse(x.body));
+                displayNewMessage(JSON.parse(x.body));
+            });
+        });
+
+        function displayNewMessage(message){
+
+            var div = document.createElement("div")
+            div.innerHTML = message.author+" : "+message.text;
+            document.getElementById('messages').appendChild(div);
+        }
+
+        function sendMessage(author, text){
+            var message = {"text":text, "author":author};
+            var headers = {"userId":"a1b2c3"}
+            stompClient.send("/chats/123/incoming-messages", headers, JSON.stringify(message));
+        }
+    </script>
+</head>
+<body>
+    <div id="messages">
+
+    </div>
+
+    <hr/>
+
+    <form>
+        <input type="text" id="author" size="10" placeholder="author..." value="John Doe"/>
+        <input type="text" id="text" size="50" placeholder="text..."/>
+        <button onclick="sendMessage(document.getElementById('author').value, document.getElementById('text').value);return false;">Envoyer</button>
+    </form>
+</body>
+</html>

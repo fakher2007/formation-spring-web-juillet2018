@@ -1,0 +1,20 @@
+<div ng-controller="BookController as model">
+	<div style="display: flex; flex: column">
+		<div style="flex: 1; padding: 15px">
+			<!--  formulaire de recherche -->
+			<form>
+				Title :
+				<input type=text" ng-model="model.filter.title" class="form-control"/>
+				<button class="btn btn-primary" ng-click="model.find()">Search</button>
+			</form>
+		</div>
+		<div style="flex: 2; padding: 15px">
+			<!-- liste de résultats -->
+			<ul class="list-group">
+				<li class="list-group-item" ng-repeat="b in model.results">
+					<a href="/books/${b.id}">{{b.title}}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

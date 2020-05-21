@@ -1,0 +1,145 @@
+types de base Java SE : 
+	- String
+	- primitifs
+	- type date (java.util.Date, java.time.*)
+	- Collection (List, Set)
+	- Map
+	- Stream
+	- CompletableFuture
+	- Optional
+
+paradigmes de programmation :
+	- programmation orientée objet (impérative...), et quelques design patterns.
+	- programmation fonctionnelle (lambda)
+	- programmation déclarative (@nnotations)
+
+***** Sur la classe de configuration Spring ***** 
+
+@Configuration
+
+@ComponentScan pour activer la découverte des classes annotées par @Component ou dérivé de @Component
+
+@PropertySource pour référencer des fichiers properties et permettre l'injection de valeurs (cf. @Value).
+
+@Enable* pour activer les services techniques de Spring
+	- @EnableMBeanExport pour activer l'export JMX
+	- @EnableAspectJAutoProxy pour activer l'AOP avec AspectJ (suppose la dépendance vers spring-aspect)
+		Prérequis : la présence d'aspectj dans le classpath (déclarer pour cela une dépendance vers spring-aspect).
+	- @EnableTransactionManagement pour activer la découverte des annotations @Transactional.
+		Prérequis : la présence d'un PlatformTransactionManager dans le contexte Spring.
+	- @EnableWebMvc pour activer le routage des requêtes HTTP entrantes vers nos méthodes annotées par @RequestMapping
+	- @EnableCaching pour activer le cache des invocations de méthodes
+		Prérequis : la présence d'un CacheManager dans le contexte Spring.
+	- @EnableGlobalMethodSecurity pour la sécurité
+
+
+***** Pour confier nos objets à Spring ***** 
+
+@Component ou un dérivé de @Component
+	@Repository
+	@Service
+	@Handler (fait maison)
+	@Controller et son dérivé @RestController
+	@ControllerAdvice et son dérivé @RestControllerAdvice
+
+@Import sur la classe de configuration pour référencer explicitement des classes. Cela vient en complément du @ComponentScan
+
+@Bean sur une méthode productrice dans la classe de configuration pour les objets dont nous seuls connaissons le secret de fabrication (exemple : un logger).
+
+@Lazy et @Scope peuvent s'utiliser dans ces 3 cas :
+	@Scope pour préciser le cycle de vie (prototype ou singleton)
+	@Lazy pour retarder la création du bean à la première injection
+
+Voir aussi @Profile et @Primary
+
+
+***** Pour l'injection de dépendances *****  
+
+	@Autowired pour les références vers d'autres beans. Deux remarques : 
+		- Valoriser à false l'attribut 'required' de l'annotation si l'injection est facultative.
+		- L'ApplicationContext est aussi injectable dans nos beans avec @Autowired
+		- les qualifiers permettent d'appliquer une condition métier à l'injection.
+
+	@Value pour les valeurs issues de fichiers properties
+
+
+***** Pour les interceptions *****
+
+	transactions : @Transactional (avec le bon niveau de propagation compte tenu de la classe où se trouve la méthode annotée)
+
+	cache : @Cacheable, @CacheEvict, @CachePut
+
+	sécurité : @PreAuthorize ou @Secured ou @RolesAllowed (ces 3 annotations servent le même besoin, il faut plutôt favoriser la première).
+
+	aop : @Around sur la classe, @Around (ou @Before, @After, @AfterThrowing, @AfterReturning) sur l'intercepteur.
+
+	Attention : cela passe par la mise en place de proxy : par association ou par héritage.
+		* Par défaut : Spring construira un proxy par association si le bean implémente une interface, un proxy par héritage sinon.
+		* Pour forcer l'utilisation de proxy par héritage, utiliser l'attribut proxyTargetClass des annotations @Enable* correspondantes
+		* Si un bean est proxifié, les appels internes des méthodes ne se font pas sur le proxy (this n'est pas le proxy)
+
+
+***** Pour la supervision *****
+
+@ManagedResource sur les classes qui contiennent des propriétés ou des méthodes à superviser.
+
+@ManagedAttribute sur les propriétés à superviser.
+
+@ManagedOperation sur les méthodes à superviser.
+
+
+***** Pour le web HTTP *****
+
+@RequestMapping pour l'aiguillage des requêtes HTTP vers les méthodes de nos beans. 
+	Ces méthodes peuvent recevoir en argument : 
+		les variables du path : @PathVariable
+		les paramètres de la requête : @RequestParam
+		le body de la requête : @RequestBody		
+		les en-têtes : @RequestHeader
+		les attributs de la requête : @RequestAttribute
+		les attributs de la session : @SessionAttribute
+		les valeurs d'un cookie : @CookieValue
+
+@ExceptionHandler pour traiter les exception
+
+
+***** Pour les websocket  *****
+
+@SubscribeMapping pour qu'une méthode soit invoquée suite à une souscription à une destination
+
+@MessageMapping pour qu'une méthode soit invoquée suite à l'arrivée d'une message sur une destination.
+	La méthode annotée ainsi peut recevoir en argument : 
+		une variable de la destination : @DestinationVariable
+		le contennu du message : @Payload
+		les en-têtes du message 
+
+
+***** Pour les tests *****
+
+@Runwith sur la classe de test pour confier l'exécution du test à Spring.
+
+@ContextConfiguration pour indiquer au runner de Spring sur quelles classes de configuration doit s'appuyer le contexte applicatif.
+
+@TestPropertySource pour référencer un fichier properties dont les propriétés viendront se substituer à celles définies dans le fichier properties référencé par @PropertySource sur la classe de configuration.
+
+@DirtiesContext pour limiter à une méthode de test ou à une classe de test la réutilisation d'un contexte.
+
+@WithMockUser pour exécuter le test avec un contexte de sécurité (équivalent de SecurityContextHolder.setContext).
+
+
+***** Les objets Spring à connaître ***** 
+
+ApplicationContext (et son implémentation AnnotationConfigApplicationContext)
+voir aussi InjectionPoint
+
+PlatformTransactionManager (et les implémentations JpaTransactionManager et JtaTransactionManager)
+
+ResponseEntity, pour contrôler précisément (statut, body, en-tête) les réponses HTTP de nos endpoints REST
+
+BindingResult, pour obtenir le résultats du binding entre les paramètres de la requête et un objet (utile pour la validation)
+
+Authentication, qui représente le contexte d'authentification d'un utilisateur connecté.
+	Il peut-être passé en argument à nos méthodes annotées par @RequestMapping
+	Il peut-être récupéré par SecurityContextHolder.getContext().getAuthentication();
+
+
