@@ -106,7 +106,7 @@
         <dependency> <!-- implémentation de l'API Bean validation -->
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>6.0.10.Final</version>
+            <version>6.0.20.Final</version>
         </dependency>
         
         <dependency>
