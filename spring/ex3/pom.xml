@@ -67,7 +67,7 @@
         <dependency> <!-- implémentation de JPA -->
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.2.17.Final</version>
+            <version>5.3.20.Final</version>
         </dependency>
 
         <dependency> <!-- cache de niveau 2 pour Hibernate -->
